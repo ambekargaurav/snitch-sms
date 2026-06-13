@@ -1,6 +1,7 @@
 package com.sinch.sms.advice;
 
 import com.sinch.sms.dto.ErrorResponse;
+import com.sinch.sms.exception.MessageNotFoundException;
 import com.sinch.sms.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,19 @@ import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MessageNotFoundException.class)
+    public ResponseEntity<ErrorResponse> messageNotFound(
+            MessageNotFoundException ex){
+        ErrorResponse response = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "NOT_FOUND",
+                ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResource(
