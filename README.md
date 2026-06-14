@@ -37,14 +37,6 @@ mvnw.cmd spring-boot:run
 
 The application will start on the default Spring Boot port (8080).
 
-### Health Check
-
-Once running, verify the service status:
-
-```bash
-curl http://localhost:8080/health
-```
-
 ## API Endpoints
 
 ### POST /messages
@@ -52,9 +44,6 @@ Create a new SMS message with destination number, content, and format. Returns m
 
 ### GET /messages/{id}
 Retrieve a message by UUID including all details and current status.
-
-### GET /health
-Health check endpoint to verify service status.
 
 ### POST /optout/{phoneNumber}
 Opt-out a phone number from receiving messages. Returns 202 Accepted.

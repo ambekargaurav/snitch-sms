@@ -4,6 +4,7 @@ import com.sinch.sms.dto.CreateMessageRequest;
 import com.sinch.sms.dto.MessageResponse;
 import com.sinch.sms.entity.Message;
 import com.sinch.sms.service.MessageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/messages")
+@Tag(name = "Messages")
 public class MessageController {
 
     private final MessageService service;

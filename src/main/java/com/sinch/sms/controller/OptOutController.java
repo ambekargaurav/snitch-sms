@@ -1,6 +1,7 @@
 package com.sinch.sms.controller;
 
 import com.sinch.sms.service.OptOutService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/optout")
+@Tag(name = "Optout Management")
 public class OptOutController {
     private final OptOutService service;
 
