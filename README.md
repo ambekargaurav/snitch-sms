@@ -118,3 +118,6 @@ Test coverage includes:
 - Unique UUID assignment
 - Message retrieval by ID
 - Error handling for non-existent messages
+- Phone number validation (AU, NZ, Global formats)
+- Carrier routing logic
+- Message processing pipeline
