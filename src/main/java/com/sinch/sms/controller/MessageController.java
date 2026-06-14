@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("/messages")
@@ -33,7 +35,7 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public Message get(
-            @PathVariable Integer id) {
+            @PathVariable UUID id) {
         log.debug("Fetching message with id: {}", id);
         return service.get(id);
     }

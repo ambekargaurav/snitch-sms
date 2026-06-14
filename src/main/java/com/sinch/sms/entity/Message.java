@@ -1,21 +1,18 @@
 package com.sinch.sms.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
-@Entity
-@Table(name = "t_messages")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+
+    private UUID id;
 
     private String destinationNumber;
 
@@ -23,7 +20,6 @@ public class Message {
 
     private String format;
 
-    @Enumerated(EnumType.STRING)
     private MessageStatus status;
 
     private Instant createdAt;

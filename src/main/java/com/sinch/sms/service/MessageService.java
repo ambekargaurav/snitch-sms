@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -23,6 +24,7 @@ public class MessageService {
 
         Message message = new Message();
 
+        message.setId(UUID.randomUUID());
         message.setDestinationNumber(request.destinationNumber());
         message.setContent(request.content());
         message.setFormat(request.format());
@@ -34,7 +36,7 @@ public class MessageService {
         return savedMessage;
     }
 
-    public Message get(Integer id) {
+    public Message get(UUID id) {
         log.debug("Fetching message with id: {}", id);
         return repository.findById(id)
                 .orElseThrow(() -> {

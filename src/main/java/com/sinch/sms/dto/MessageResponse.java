@@ -2,6 +2,8 @@ package com.sinch.sms.dto;
 
 import com.sinch.sms.entity.MessageStatus;
 
-public record MessageResponse(Integer id,
+import java.util.UUID;
+
+public record MessageResponse(UUID id,
                               MessageStatus status) {
 }
