@@ -56,6 +56,9 @@ Retrieve a message by UUID including all details and current status.
 ### GET /health
 Health check endpoint to verify service status.
 
+### POST /optout/{phoneNumber}
+Opt-out a phone number from receiving messages. Returns 202 Accepted.
+
 ## Data Model
 
 **Message Entity**
@@ -67,9 +70,30 @@ Health check endpoint to verify service status.
 - `status` - Message status (PENDING, SENT, DELIVERED, BLOCKED)
 - `createdAt` - Timestamp of message creation
 
+**OptOut Entity**
+- `phoneNumber` - Phone number opted out from receiving messages
+
 ## Design Overview & Assumptions
 
 This service implements a simplified SMS routing system using a layered, event-driven architecture.
+
+### Message Flow
+
+```
+POST /messages
+↓
+Message saved (PENDING)
+↓
+Processor validates
+↓
+Check Opt-Out List
+↓
+If opted out:
+  BLOCKED
+Else:
+  Route Carrier
+  SENT
+```
 
 ### Key Assumptions
 
@@ -97,7 +121,7 @@ The current event-based design is intentionally lightweight and can be evolved i
 
 ## Project Status
 
-Core messaging functionality implemented with message creation, retrieval, validation, carrier routing, and status tracking. Uses in-memory storage with UUID identifiers, event-driven processing, and comprehensive logging. Unit tests cover message creation, retrieval, and error handling scenarios.
+Core messaging functionality implemented with message creation, retrieval, validation, carrier routing, opt-out checking, and status tracking. Uses in-memory storage with UUID identifiers, event-driven processing, and comprehensive logging. Unit tests cover message creation, retrieval, validation, routing, and error handling scenarios.
 
 ## Testing
 
@@ -119,5 +143,6 @@ Test coverage includes:
 - Message retrieval by ID
 - Error handling for non-existent messages
 - Phone number validation (AU, NZ, Global formats)
-- Carrier routing logic
+- Carrier routing logic (AU round-robin, NZ to SPARK, Global to GLOBAL)
 - Message processing pipeline
+- Opt-out functionality

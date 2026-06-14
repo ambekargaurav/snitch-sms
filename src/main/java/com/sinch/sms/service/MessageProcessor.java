@@ -19,19 +19,28 @@ public class MessageProcessor {
     private final MessageRepository repository;
     private final PhoneNumberValidator validator;
     private final CarrierRoutingService router;
+    private final OptOutService optOutService;
 
     public MessageProcessor(MessageRepository repository,
                             PhoneNumberValidator validator,
-                            CarrierRoutingService router) {
+                            CarrierRoutingService router,
+                            OptOutService optOutService) {
         this.repository = repository;
         this.validator = validator;
         this.router = router;
+        this.optOutService = optOutService;
     }
 
     public void process(UUID messageId) {
         log.debug("Processing message with id: {}", messageId);
         Message message = repository.findById(messageId).orElseThrow();
         validator.validate(message.getDestinationNumber());
+        if (optOutService.isOptedOut(
+                message.getDestinationNumber())) {
+            message.setStatus(MessageStatus.BLOCKED);
+            repository.save(message);
+            return;
+        }
         Carrier carrier = router.route(message.getDestinationNumber());
         message.setCarrier(carrier);
         message.setStatus(MessageStatus.SENT);
