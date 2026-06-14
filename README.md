@@ -11,10 +11,9 @@ Snitch SMS is a microservice built with Spring Boot that provides SMS message ro
 - **Java 21**
 - **Spring Boot 4.1.0**
 - **Spring Web** - REST API framework
-- **Spring Data JPA** - Database abstraction
-- **H2 Database** - In-memory database for development
 - **Lombok** - Reduce boilerplate code
 - **Spring Validation** - Request validation
+- **Logback** - Logging framework
 - **Maven** - Build tool
 
 ## Getting Started
@@ -46,22 +45,13 @@ Once running, verify the service status:
 curl http://localhost:8080/health
 ```
 
-### Database Console
-
-H2 console is available at: `http://localhost:8080/h2-console`
-
-Connection details:
-- JDBC URL: `jdbc:h2:mem:smsdb`
-- Username: `sa`
-- Password: (empty)
-
 ## API Endpoints
 
 ### POST /messages
-Create a new SMS message with destination number, content, and format. Returns message ID and initial status (PENDING).
+Create a new SMS message with destination number, content, and format. Returns message UUID and initial status (PENDING).
 
 ### GET /messages/{id}
-Retrieve a message by ID including all details and current status.
+Retrieve a message by UUID including all details and current status.
 
 ### GET /health
 Health check endpoint to verify service status.
@@ -69,7 +59,7 @@ Health check endpoint to verify service status.
 ## Data Model
 
 **Message Entity**
-- `id` - Unique identifier
+- `id` - UUID identifier
 - `destinationNumber` - Recipient phone number
 - `content` - SMS message content
 - `format` - Message format
@@ -78,4 +68,24 @@ Health check endpoint to verify service status.
 
 ## Project Status
 
-Core messaging functionality implemented with message creation, retrieval, and status tracking.
+Core messaging functionality implemented with message creation, retrieval, and status tracking. Uses in-memory storage with UUID identifiers and comprehensive logging. Unit tests cover message creation, retrieval, and error handling scenarios.
+
+## Testing
+
+Run tests using Maven:
+
+```bash
+./mvnw test
+```
+
+Or on Windows:
+
+```bash
+mvnw.cmd test
+```
+
+Test coverage includes:
+- Message creation with PENDING status
+- Unique UUID assignment
+- Message retrieval by ID
+- Error handling for non-existent messages
