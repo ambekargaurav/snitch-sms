@@ -1,11 +1,13 @@
 package com.sinch.sms.service;
 
 import com.sinch.sms.dto.CreateMessageRequest;
+import com.sinch.sms.dto.MessageCreatedEvent;
 import com.sinch.sms.entity.Message;
 import com.sinch.sms.entity.MessageStatus;
 import com.sinch.sms.exception.MessageNotFoundException;
 import com.sinch.sms.repository.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,9 +17,11 @@ import java.util.UUID;
 @Service
 public class MessageService {
     private final MessageRepository repository;
+    private final ApplicationEventPublisher publisher;
 
-    public MessageService(MessageRepository repository) {
+    public MessageService(MessageRepository repository, ApplicationEventPublisher publisher) {
         this.repository = repository;
+        this.publisher = publisher;
     }
     public Message create(CreateMessageRequest request) {
         log.debug("Creating message with destination: {}", request.destinationNumber());
@@ -33,6 +37,9 @@ public class MessageService {
 
         Message savedMessage = repository.save(message);
         log.debug("Message saved with id: {}", savedMessage.getId());
+        publisher.publishEvent(
+                new MessageCreatedEvent(message.getId())
+        );
         return savedMessage;
     }
 

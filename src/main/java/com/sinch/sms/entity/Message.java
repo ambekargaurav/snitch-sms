@@ -20,6 +20,8 @@ public class Message {
 
     private String format;
 
+    private Carrier carrier;
+
     private MessageStatus status;
 
     private Instant createdAt;

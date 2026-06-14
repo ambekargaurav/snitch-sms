@@ -1,6 +1,7 @@
 package com.sinch.sms.advice;
 
 import com.sinch.sms.dto.ErrorResponse;
+import com.sinch.sms.exception.InvalidPhoneNumberException;
 import com.sinch.sms.exception.MessageNotFoundException;
 import com.sinch.sms.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,20 @@ import java.time.Instant;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(InvalidPhoneNumberException.class)
+    public ResponseEntity<ErrorResponse> invalidPhoneNumber(
+            InvalidPhoneNumberException ex){
+        log.warn("InvalidPhoneNumberException: {}", ex.getMessage());
+        ErrorResponse response = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "BAD_REQUEST",
+                ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
 
     @ExceptionHandler(MessageNotFoundException.class)
     public ResponseEntity<ErrorResponse> messageNotFound(

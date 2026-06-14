@@ -8,6 +8,7 @@ import com.sinch.sms.repository.InMemoryMessageRepository;
 import com.sinch.sms.repository.MessageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
 
@@ -20,7 +21,8 @@ public class MessageServiceTest {
     @BeforeEach
     void setUp() {
         MessageRepository repository = new InMemoryMessageRepository();
-        this.messageService = new MessageService(repository);
+        ApplicationEventPublisher publisher = org.mockito.Mockito.mock(ApplicationEventPublisher.class);
+        this.messageService = new MessageService(repository, publisher);
     }
 
     /**
