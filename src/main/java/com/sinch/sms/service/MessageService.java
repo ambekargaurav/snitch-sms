@@ -5,10 +5,12 @@ import com.sinch.sms.entity.Message;
 import com.sinch.sms.entity.MessageStatus;
 import com.sinch.sms.exception.MessageNotFoundException;
 import com.sinch.sms.repository.MessageRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+@Slf4j
 @Service
 public class MessageService {
     private final MessageRepository repository;
@@ -17,6 +19,7 @@ public class MessageService {
         this.repository = repository;
     }
     public Message create(CreateMessageRequest request) {
+        log.debug("Creating message with destination: {}", request.destinationNumber());
 
         Message message = new Message();
 
@@ -26,14 +29,18 @@ public class MessageService {
         message.setStatus(MessageStatus.PENDING);
         message.setCreatedAt(Instant.now());
 
-        return repository.save(message);
+        Message savedMessage = repository.save(message);
+        log.debug("Message saved with id: {}", savedMessage.getId());
+        return savedMessage;
     }
 
     public Message get(Integer id) {
-
+        log.debug("Fetching message with id: {}", id);
         return repository.findById(id)
-                .orElseThrow(() ->
-                        new MessageNotFoundException(
-                                "Message not found: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Message not found with id: {}", id);
+                    return new MessageNotFoundException(
+                            "Message not found: " + id);
+                });
     }
 }
