@@ -4,7 +4,7 @@ SMS Message Router - A Spring Boot application for routing and managing SMS mess
 
 ## Overview
 
-Snitch SMS is a microservice built with Spring Boot that provides SMS message routing capabilities. The service is designed to handle SMS message processing and management with a RESTful API interface.
+Snitch SMS is a microservice built with Spring Boot that provides SMS message routing capabilities. The service handles SMS message creation, tracking, and retrieval through a RESTful API with status monitoring (PENDING, SENT, DELIVERED, BLOCKED).
 
 ## Tech Stack
 
@@ -13,6 +13,8 @@ Snitch SMS is a microservice built with Spring Boot that provides SMS message ro
 - **Spring Web** - REST API framework
 - **Spring Data JPA** - Database abstraction
 - **H2 Database** - In-memory database for development
+- **Lombok** - Reduce boilerplate code
+- **Spring Validation** - Request validation
 - **Maven** - Build tool
 
 ## Getting Started
@@ -53,6 +55,27 @@ Connection details:
 - Username: `sa`
 - Password: (empty)
 
+## API Endpoints
+
+### POST /messages
+Create a new SMS message with destination number, content, and format. Returns message ID and initial status (PENDING).
+
+### GET /messages/{id}
+Retrieve a message by ID including all details and current status.
+
+### GET /health
+Health check endpoint to verify service status.
+
+## Data Model
+
+**Message Entity**
+- `id` - Unique identifier
+- `destinationNumber` - Recipient phone number
+- `content` - SMS message content
+- `format` - Message format
+- `status` - Message status (PENDING, SENT, DELIVERED, BLOCKED)
+- `createdAt` - Timestamp of message creation
+
 ## Project Status
 
-Currently in early development phase with basic Spring Boot infrastructure and health check endpoint.
+Core messaging functionality implemented with message creation, retrieval, and status tracking.
