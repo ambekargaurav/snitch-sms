@@ -35,15 +35,17 @@ public class MessageProcessor {
         log.debug("Processing message with id: {}", messageId);
         Message message = repository.findById(messageId).orElseThrow();
         validator.validate(message.getDestinationNumber());
+        Carrier carrier = router.route(message.getDestinationNumber());
+        message.setCarrier(carrier);
+        message.setStatus(MessageStatus.SENT);
+        repository.save(message);
         if (optOutService.isOptedOut(
                 message.getDestinationNumber())) {
             message.setStatus(MessageStatus.BLOCKED);
             repository.save(message);
             return;
         }
-        Carrier carrier = router.route(message.getDestinationNumber());
-        message.setCarrier(carrier);
-        message.setStatus(MessageStatus.SENT);
+        message.setStatus(MessageStatus.DELIVERED);
         repository.save(message);
         log.debug("Message processed successfully with id: {}", messageId);
     }

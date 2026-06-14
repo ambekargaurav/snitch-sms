@@ -1,10 +1,10 @@
-# Snitch SMS
+# Sinch SMS
 
 SMS Message Router - A Spring Boot application for routing and managing SMS messages.
 
 ## Overview
 
-Snitch SMS is a microservice built with Spring Boot that provides SMS message routing capabilities. The service handles SMS message creation, validation, carrier routing, and tracking through a RESTful API with status monitoring (PENDING, SENT, DELIVERED, BLOCKED).
+Sinch SMS is a microservice built with Spring Boot that provides SMS message routing capabilities. The service handles SMS message creation, validation, carrier routing, and tracking through a RESTful API with status monitoring (PENDING, SENT, DELIVERED, BLOCKED).
 
 ## Tech Stack
 
@@ -86,13 +86,14 @@ Message saved (PENDING)
 ↓
 Processor validates
 ↓
+  Route Carrier
+  SENT
 Check Opt-Out List
 ↓
 If opted out:
   BLOCKED
 Else:
-  Route Carrier
-  SENT
+  DELIVERED
 ```
 
 ### Key Assumptions
@@ -101,8 +102,8 @@ Else:
 - Messages follow the lifecycle: PENDING → SENT → DELIVERED/BLOCKED
 - A message is marked as PENDING when initially created via the API
 - A message transitions to SENT after successful validation and carrier routing
-- Delivery confirmation is out of scope and not implemented
 - Opt-out numbers are blocked before processing and marked as BLOCKED
+- If not BLOCKED SMS is Marked as DELIVERED
 
 **Phone Number Validation**
 - AU: +61 followed by 9 digits
